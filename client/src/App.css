@@ -1,0 +1,102 @@
+.menu-container-logo {
+  height: 200px;
+  width: 100%;
+  text-align: center;
+  padding-top: 30px;
+}
+
+.menu-container-logo img {
+  height: 120px;
+}
+
+nav.topbar {
+  background: #464646;
+}
+
+/* FIM MENU */
+
+header.header-componente {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  background: black;
+  color: white;
+  text-align: center;
+}
+
+header.header-componente span {
+  padding-top: 12px;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.header-componente i.btn-toggle-menu {
+  float: left;
+  background: #2d2d2d;
+  height: 50px;
+  width: 50px;
+  box-sizing: border-box !important;
+  padding-top: 12px;
+
+}
+
+.header-componente i.btn-action {
+  float: right;
+  visibility: hidden;
+  height: 50px;
+  width: 50px;
+}
+
+section.body-componente {
+  position: absolute;
+  top: 56px;
+  bottom: 0;
+  width: 100%;
+}
+
+.ul-chamados {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.ul-chamados li {
+  position: relative;
+  height: 100px;
+  padding-left: 20px;
+  background: #e8e8e8;
+  border-bottom: 1px solid #676767;
+  padding-top: 5px;
+}
+
+.ul-chamados .li-chamado-infs {
+  float: left;
+}
+
+.ul-chamados .li-chamado-actions {
+  float: right;
+}
+
+.ul-chamados .li-chamado-actions a {
+  background: #676262 !important;
+  margin: 20px 10px 0 0;
+}
+
+.clearfix:after {
+  content: ".";
+  visibility: hidden;
+  display: block;
+  height: 0;
+  clear: both;
+}
+.btn-fechar-chamado {
+  position: absolute;
+  right: 16px;
+  top: 30%;
+}
+
+.infs-chamado p{
+  margin: 0;
+}
