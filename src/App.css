@@ -63,8 +63,12 @@ section.body-componente {
 }
 
 .ul-chamados li {
-  background: #afffaf;
+  position: relative;
+  height: 100px;
   padding-left: 20px;
+  background: #afffaf;
+  border-bottom: 1px solid #676767;
+  padding-top: 5px;
 }
 
 .ul-chamados .li-chamado-infs {
@@ -86,4 +90,13 @@ section.body-componente {
   display: block;
   height: 0;
   clear: both;
+}
+.btn-fechar-chamado {
+  position: absolute;
+  right: 16px;
+  top: 30%;
+}
+
+.infs-chamado p{
+  margin: 0;
 }
