@@ -1,7 +1,8 @@
 const express = require('express');
 const mongodb = require('mongodb');
-
+const nodemailer = require('nodemailer');
 const app = express();
+
 const port = process.env.PORT || 5000;
 const dbUrl = "mongodb://localhost:27017/";
 const chamadosCollection = "chamados";
@@ -26,40 +27,37 @@ app.get('/chamados/new', (req, res) => {
 });
 
 
-function sendmail(){
-  var nodemailer = require('nodemailer');
-
-  var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'tarapi007@gmail.com',
-      pass: 'generalize'
-    }
-  });
-
-  var mailOptions = {
-    from: 'tarapi007@gmail.com',
-    to: 'diegopereiracalcada@gmail.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
-  };
-
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
-  });
 
 
-}
-sendmail();
-app.get('/chamados/close', (req, res) => {
-  console.log("Iniciando fechmaento");
-    var osNumber = req.query.osNumber;
-    console.log(`os recegida ${osNumber}`);
+const EmailManager = {
+  sendCloseMail : function (target, osNumber){
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'tarapi007@gmail.com',
+        pass: 'generalize'
+      }
+    });
+  
+    var mailOptions = {
+      from: 'tarapi007@gmail.com',
+      to: 'diegopereiracalcada@gmail.com',
+      subject: `Finalização do chamado nº  ${osNumber}`, 
+      text: `Seu chamado de  nº ${osNumber} foi finalizado. Caso tenha alguma dúvida ou solicitação, pode responder este email.`
+    };
+  
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  }
+};
 
+const ChamadosCrud = {
+  fecharChamado : (osNumber, res) => {
     try{
       var MongoClient = mongodb.MongoClient;
       console.log("vai conectar;");
@@ -86,15 +84,24 @@ app.get('/chamados/close', (req, res) => {
               "multi": false  // update only one document 
             }
         );
-        console.log("ocorreu um update no banco as " + new Date());
+        console.log("Update com sucesso -  " + new Date());
       });
       console.log("Finalizando fechamento");  
       res.send({ status: 1 });
     } catch (ex){
-      console.log("erro no fechamento!!!!!!!!!!!!!!!!!!!!!!!");
       console.log(ex);
-      res.send({ status: -1 });
+      //res.send({ status: -1 });
     }
+  }
+};
+
+app.get('/chamados/close', (req, res) => {
+  console.log("Iniciando fechmaento");
+  var osNumber = req.query.osNumber;
+  console.log(`os recegida ${osNumber}`);
+
+  EmailManager.sendCloseMail("diegopereiracalcada@gmail.com", osNumber);
+  ChamadosCrud.fecharChamado(osNumber, res);
   
 });
 

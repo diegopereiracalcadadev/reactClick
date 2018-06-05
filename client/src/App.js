@@ -77,6 +77,12 @@ class ItemChamado extends React.Component {
         .catch(err => alert(err));
   }
 
+  handleOnClick = ()=>{
+    if(window.confirm(`Tem certeza de que deseja fechar o chamado ${this.props.osNumber} ?`)){
+      this.fecharChamado();
+    }
+  }
+
   render() {
     return (
       this.state.show ?
@@ -88,7 +94,7 @@ class ItemChamado extends React.Component {
           </div>
           <div>
             <button
-              onClick={this.fecharChamado}
+              onClick={this.handleOnClick}
               className="waves-effect waves-light btn btn-fechar-chamado">Fechar</button>
             <p>Aberto em <span className="dt-abertura">{this.props.dtAbertura}</span></p>  
           </div>
