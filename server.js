@@ -42,7 +42,7 @@ const EmailManager = {
     var mailOptions = {
       from: 'tarapi007@gmail.com',
       to: 'diegopereiracalcada@gmail.com',
-      subject: `Finalização do chamado nº  ${osNumber}`, 
+      subject: `Finalização do chamado nº  ${osNumber} - ClickTI Informática`, 
       text: `Seu chamado de  nº ${osNumber} foi finalizado. Caso tenha alguma dúvida ou solicitação, pode responder este email.`
     };
   
