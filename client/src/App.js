@@ -50,7 +50,7 @@ class ItemChamado extends React.Component {
     this.fecharChamado = this.fecharChamado.bind(this);
   }
 
-  sendCloseOs = async (osNumber) => {
+  sendCloseRequest = async (osNumber) => {
     console.log("sendCloseRequest chamado. os: " + osNumber);
     const response = await fetch(`chamados/close?osNumber=${osNumber}`);
     const body = await response.json();
@@ -68,11 +68,15 @@ class ItemChamado extends React.Component {
       return false;
     }
     // TODO mostraR modal aguarde
-    this.sendCloseOs(chamado.osNumber)
+    this.sendCloseRequest(chamado.osNumber)
         .then(res => {
           //this.setState({ response: res.status });
-          this.setState({ show: false });
-          alert(`Solicitação de encerramento do chamado ${chamado.osNumber} enviada.`);
+          if(res.status == 1){
+            this.setState({ show: false });
+            console.log(`Solicitação de encerramento do chamado ${chamado.osNumber} finalizada.`);
+          } else {
+            alert("Erro ao tentar fechar o chamado");
+          }
         })
         .catch(err => alert(err));
   }

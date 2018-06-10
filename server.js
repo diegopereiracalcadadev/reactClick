@@ -34,16 +34,23 @@ const EmailManager = {
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'tarapi007@gmail.com',
-        pass: 'generalize'
+        user: 'atendimentochamado@gmail.com',
+        pass: 'gerasamba'
       }
     });
   
     var mailOptions = {
-      from: 'tarapi007@gmail.com',
-      to: 'diegopereiracalcada@gmail.com',
-      subject: `Finalização do chamado nº  ${osNumber} - ClickTI Informática`, 
-      text: `Seu chamado de  nº ${osNumber} foi finalizado. Caso tenha alguma dúvida ou solicitação, pode responder este email.`
+      from: 'atendimentochamado@gmail.com',
+      to: target,
+      subject: `Encerramento do chamado nº <b>${osNumber}</b> - ClickTI Informática`, 
+      text: `Informamos que o chamado º1304 está sendo encerrado. 
+
+      Descrição inicial:
+      
+      Solução:
+      
+      Responda este e-mail em caso de dúvidas ou solicitações.
+      Atenciosamente, ClickTI Informática`
     };
   
     transporter.sendMail(mailOptions, function(error, info){
@@ -90,7 +97,7 @@ const ChamadosCrud = {
       res.send({ status: 1 });
     } catch (ex){
       console.log(ex);
-      //res.send({ status: -1 });
+      res.send({ status: -1 });
     }
   }
 };
@@ -100,7 +107,7 @@ app.get('/chamados/close', (req, res) => {
   var osNumber = req.query.osNumber;
   console.log(`os recegida ${osNumber}`);
 
-  EmailManager.sendCloseMail("diegopereiracalcada@gmail.com", osNumber);
+  EmailManager.sendCloseMail("tarapi007@gmail.com", osNumber);
   ChamadosCrud.fecharChamado(osNumber, res);
   
 });
