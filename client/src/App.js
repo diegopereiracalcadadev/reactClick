@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import logoimg from "./imgs/logo.jpg";
+import axios from 'axios';
 
 class Header extends React.Component {
   render() {
@@ -27,9 +28,6 @@ class Header extends React.Component {
 }
 
 
-
-
-
 class ItemChamado extends React.Component {
   state = {
     response: '',
@@ -40,11 +38,15 @@ class ItemChamado extends React.Component {
     console.log("constucto chamado");
     super(props);
     
-    console.log(this.state);
-    this.state._id_ = props._id_;
+    this.state._id = props._id;
+    this.state.osNumber = props.osNumber;
+    this.state.status = props.status;
     this.state.idCliente = props.idCliente;
     this.state.desc = props.desc;
-    this.state.dtAbertura = props.dtAbertura;
+    this.state.solution = props.solution;
+    this.state.comments = props.comments;
+    this.state.openDate = props.openDate;
+    this.state.closedDate = props.closedDate;
     console.log(this.state);
     
     this.fecharChamado = this.fecharChamado.bind(this);
@@ -100,7 +102,7 @@ class ItemChamado extends React.Component {
             <button
               onClick={this.handleOnClick}
               className="waves-effect waves-light btn btn-fechar-chamado">Fechar</button>
-            <p>Aberto em <span className="dt-abertura">{this.props.dtAbertura}</span></p>  
+            <p>Aberto em <span className="dt-abertura">{this.props.openDate}</span></p>  
           </div>
         </li>
       : null
@@ -111,12 +113,39 @@ class ItemChamado extends React.Component {
 
 
 class ListaChamados extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      chamados: []
+    };
+  }
+
+  componentDidMount() {
+    axios.get(`chamados/getOpeneds`)
+      .then(res => {
+        console.log("did mounted");
+        console.log(res)
+        const chamados = res.data;
+        this.setState({ chamados });
+      });
+  }
+
   render() {
     return (
       <ul className="ul-chamados">
-        <ItemChamado _id_="801" osNumber="1005" idCliente="1" desc="desccham1" dtAbertura="21/01/2018" />
-        <ItemChamado _id_="802" osNumber="1006" idCliente="2" desc="desccham2" dtAbertura="21/02/2018" />
-        <ItemChamado _id_="803" osNumber="1007" idCliente="3" desc="desccham3" dtAbertura="21/03/2018" />
+        {this.state.chamados.map(chamado =>
+            <ItemChamado _id_={chamado.id}
+                osNumber = {chamado.osNumber}
+                status = {chamado.status}
+                idCliente = {chamado.idCliente}
+                desc = {chamado.desc}
+                solution = {chamado.solution}
+                comments = {chamado.comments}
+                openDate = {chamado.openDate}
+                closedDate = {chamado.closedDate}
+                />
+          )}
       </ul>
     );
   }

@@ -130,4 +130,21 @@ app.get('/chamados/getAll', (req, res) => {
   })
 });
 
+app.get('/chamados/getOpeneds', (req, res) => {
+  console.log("---------> /chamados/getOpeneds <-------------")
+  var MongoClient = mongodb.MongoClient;
+  MongoClient.connect(dbUrl, (err, db)=>{
+    if(err) throw err;
+    let dbo = db.db('local')
+    console.log("Vai comecar a baixaria...");
+    //dbo.collection(chamadosCollection).find({}).toArray();
+    dbo.collection(chamadosCollection).find({status : 0}).toArray(function(err, items) {
+      console.log(items);
+      res.send(items);
+    });
+    //console.log(arr);
+    
+  })
+});
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
