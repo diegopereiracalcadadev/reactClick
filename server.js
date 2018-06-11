@@ -42,15 +42,16 @@ const EmailManager = {
     var mailOptions = {
       from: 'atendimentochamado@gmail.com',
       to: target,
-      subject: `Encerramento do chamado nº <b>${osNumber}</b> - ClickTI Informática`, 
-      text: `Informamos que o chamado º1304 está sendo encerrado. 
+      subject: `Encerramento do chamado nº ${osNumber} - ClickTI Informática`, 
+      text: `
+        Informamos que o chamado  <b>${osNumber}</b> está sendo encerrado. 
 
-      Descrição inicial:
-      
-      Solução:
-      
-      Responda este e-mail em caso de dúvidas ou solicitações.
-      Atenciosamente, ClickTI Informática`
+        Descrição inicial:
+
+        Solução:
+
+        Responda este e-mail em caso de dúvidas ou solicitações.
+        Atenciosamente, ClickTI Informática`
     };
   
     transporter.sendMail(mailOptions, function(error, info){
@@ -110,6 +111,23 @@ app.get('/chamados/close', (req, res) => {
   EmailManager.sendCloseMail("tarapi007@gmail.com", osNumber);
   ChamadosCrud.fecharChamado(osNumber, res);
   
+});
+
+app.get('/chamados/getAll', (req, res) => {
+  console.log("---------> /chamados/getAll <-------------")
+  var MongoClient = mongodb.MongoClient;
+  MongoClient.connect(dbUrl, (err, db)=>{
+    if(err) throw err;
+    let dbo = db.db('local')
+    console.log("Vai comecar a baixaria...");
+    //dbo.collection(chamadosCollection).find({}).toArray();
+    dbo.collection(chamadosCollection).find().toArray(function(err, items) {
+      console.log(items);
+      res.send(items);
+    });
+    //console.log(arr);
+    
+  })
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
