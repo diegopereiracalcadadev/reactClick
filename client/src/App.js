@@ -42,6 +42,7 @@ class ItemChamado extends React.Component {
     this.state.osNumber = props.osNumber;
     this.state.status = props.status;
     this.state.idCliente = props.idCliente;
+    this.state.cliente = props.cliente;
     this.state.desc = props.desc;
     this.state.solution = props.solution;
     this.state.comments = props.comments;
@@ -92,25 +93,30 @@ class ItemChamado extends React.Component {
   render() {
     return (
       this.state.show ?
-      <li className="li-chamado">
+        <li className="li-chamado">
           <div className="infs-chamado">
             <input type="hidden" name="idCliente" value={this.props.idCliente} />
-            <p className="nome-cliente">{this.props.idCliente}</p>
+            <p class="os-number">OS-{this.props.osNumber}</p>
+            <p className="nome-cliente">{this.props.cliente}</p>
             <p className="desc-chamado">{this.props.desc}</p>
           </div>
-          <div>
-            <button
-              onClick={this.handleOnClick}
-              className="waves-effect waves-light btn btn-fechar-chamado">Fechar</button>
-            <p>Aberto em <span className="dt-abertura">{this.props.openDate}</span></p>  
+          
+          <div class="status-chamado">
+            <div class="infs-abertura" style={{marginBottom: 10}}>
+              <p>Aberto em</p> 
+              <p class="dt-abertura">{this.props.openDate}</p>
+            </div>
+            <div style={{marginLeft: 8}}>
+              <button 
+                onClick={this.handleOnClick}
+                className="waves-effect waves-light btn btn-fechar-chamado">Fechar</button>
+            </div>
           </div>
         </li>
-      : null
+        : null
     );
   }
 }
-
-
 
 class ListaChamados extends React.Component {
   constructor(props) {
@@ -139,6 +145,7 @@ class ListaChamados extends React.Component {
                 osNumber = {chamado.osNumber}
                 status = {chamado.status}
                 idCliente = {chamado.idCliente}
+                cliente = {chamado.cliente}
                 desc = {chamado.desc}
                 solution = {chamado.solution}
                 comments = {chamado.comments}

@@ -99,12 +99,51 @@ section.body-componente {
   height: 0;
   clear: both;
 }
-.btn-fechar-chamado {
+
+.infs-chamado {
   position: absolute;
-  right: 16px;
-  top: 30%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 100px;
+  padding-left: 9px;
+  padding-top: 3px;
 }
 
-.infs-chamado p{
+.infs-chamado .nome-cliente{
+  font-weight: 600;
+  font-size: 20px;
+  margin: 0px;
+}
+
+.infs-chamado .desc-chamado{
+  margin: 0px;
+}
+
+
+.infs-abertura p{
+  font-size: 9px;
+  text-align: center;
   margin: 0;
+}
+
+.infs-abertura{
+  margin-bottom: 10px; 
+}
+
+.status-chamado{
+  position: absolute;
+  right: 0;
+  width: 100px;
+  top: 0;
+  bottom: 0;
+}
+
+.os-number{
+  margin: 0;
+  font-size: 10px;
+}
+
+.btn-fechar-chamado{
+  background-color: #2665a6;
 }
