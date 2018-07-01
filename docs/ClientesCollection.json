@@ -1,0 +1,13 @@
+{
+    "clientCode": 1,
+    "clientName": "AMontenegro",
+    "phones": ["2232-5909"],
+    "cnpj": "00.000.000/0000-00",
+    "responsible": "Alberico",
+    "responsibleCPF": "000000000-00",
+    "emails": ["amontenegro@terra.com.br", 
+        "maryannemontenegro@terra.com.br",
+        "amontenegroadvogados@terra.com.br"
+        ]
+
+}

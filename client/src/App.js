@@ -41,13 +41,13 @@ class ItemChamado extends React.Component {
     this.state._id = props._id;
     this.state.osNumber = props.osNumber;
     this.state.status = props.status;
-    this.state.idCliente = props.idCliente;
-    this.state.cliente = props.cliente;
-    this.state.desc = props.desc;
+    this.state.clientId = props.clientId;
+    this.state.clientName = props.clientName;
+    this.state.description = props.description;
     this.state.solution = props.solution;
     this.state.comments = props.comments;
-    this.state.openDate = props.openDate;
-    this.state.closedDate = props.closedDate;
+    this.state.openingDate = props.openingDate;
+    this.state.closingDate = props.closingDate;
     console.log(this.state);
     
     this.fecharChamado = this.fecharChamado.bind(this);
@@ -95,16 +95,16 @@ class ItemChamado extends React.Component {
       this.state.show ?
         <li className="li-chamado">
           <div className="infs-chamado">
-            <input type="hidden" name="idCliente" value={this.props.idCliente} />
+            <input type="hidden" name="clientId" value={this.props.clientId} />
             <p class="os-number">OS-{this.props.osNumber}</p>
-            <p className="nome-cliente">{this.props.cliente}</p>
-            <p className="desc-chamado">{this.props.desc}</p>
+            <p className="nome-cliente">{this.props.clientName}</p>
+            <p className="desc-chamado">{this.props.description}</p>
           </div>
           
           <div class="status-chamado">
             <div class="infs-abertura" style={{marginBottom: 10}}>
               <p>Aberto em</p> 
-              <p class="dt-abertura">{this.props.openDate}</p>
+              <p class="dt-abertura">{this.props.openingDate}</p>
             </div>
             <div style={{marginLeft: 8}}>
               <button 
@@ -144,13 +144,13 @@ class ListaChamados extends React.Component {
             <ItemChamado _id_={chamado.id}
                 osNumber = {chamado.osNumber}
                 status = {chamado.status}
-                idCliente = {chamado.idCliente}
-                cliente = {chamado.cliente}
-                desc = {chamado.desc}
+                clientId = {chamado.clientId}
+                clientName = {chamado.clientName}
+                description = {chamado.description}
                 solution = {chamado.solution}
                 comments = {chamado.comments}
-                openDate = {chamado.openDate}
-                closedDate = {chamado.closedDate}
+                openingDate = {chamado.openingDate}
+                closingDate = {chamado.closingDate}
                 />
           )}
       </ul>

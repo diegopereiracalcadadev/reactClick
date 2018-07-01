@@ -1,0 +1,12 @@
+{
+    "_id" : ObjectId("5b37ea8d1a49ccc65240fdea"),
+    "osNumber" : 1002,
+    "status" : 1,
+    "clientId" : 902,
+    "clientName" : "Bibi Barra",
+    "description" : "Computador  não está ligando.",
+    "solution" : "Realizada troca da fonte",
+    "comments" : [],
+    "openingDate" : "2018-06-10T05:14:17.179Z",
+    "closingDate" : ISODate("2018-06-30T22:42:18.768Z")
+}

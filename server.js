@@ -8,29 +8,9 @@ const dbUrl = "mongodb://localhost:27017/";
 const chamadosCollection = "chamados";
 
 
-app.get('/chamados/new', (req, res) => {
-  console.log("Iniciando novo chamado");
-
-  var MongoClient = mongodb.MongoClient;
-  var chamado = { "desc": "viaapi" };
-  console.log("vai conectar;");
-  MongoClient.connect(dbUrl, function (err, db) {
-    if (err) throw err;
-    var dbo = db.db("local");
-    dbo.collection(chamadosCollection).insertOne(chamado, function (err, res) {
-      if (err) throw err;
-      console.log("1 document inserted");
-      db.close();
-    });
-  });
-  res.send({ express: 'Hello From Express' });
-});
-
-
-
 
 const EmailManager = {
-  sendCloseMail : function (target, osNumber){
+  sendCloseMail : function (target, osNumber, clientName, solicitante, description, solution){
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -42,16 +22,19 @@ const EmailManager = {
     var mailOptions = {
       from: 'atendimentochamado@gmail.com',
       to: target,
-      subject: `Encerramento do chamado nº ${osNumber} - ClickTI Informática`, 
-      text: `
-        Informamos que o chamado  <b>${osNumber}</b> está sendo encerrado. 
+      subject: `Encerramento do chamado OS-${osNumber} - ClickTI Informática`, 
+      html: `
+        Informamos que o chamado  <b>OS-${osNumber}</b> está sendo encerrado. 
 
-        Descrição inicial:
+        <b>Empresa:</b>${clientName}
+        <b>Usuário Solicitante:</b>${solicitante}
 
-        Solução:
+        <b>Descrição inicial:</b>${description}
 
-        Responda este e-mail em caso de dúvidas ou solicitações.
-        Atenciosamente, ClickTI Informática`
+        <b>Solução:</b>${solution}
+
+        <b>Responda este e-mail caso possamos ajudar em algo mais.</b>
+        Controle de Qualidade - ClickTI Informática`
     };
   
     transporter.sendMail(mailOptions, function(error, info){
@@ -65,7 +48,7 @@ const EmailManager = {
 };
 
 const ChamadosCrud = {
-  fecharChamado : (osNumber, res) => {
+  fecharChamado : (osNumber, solution, res) => {
     try{
       var MongoClient = mongodb.MongoClient;
       console.log("vai conectar;");
@@ -84,7 +67,8 @@ const ChamadosCrud = {
                   },
               $set:
                   {
-                    "status" : 1 
+                    "status" : 1,
+                    "solution" : solution
                   }
             },
             {
@@ -98,18 +82,40 @@ const ChamadosCrud = {
       res.send({ status: 1 });
     } catch (ex){
       console.log(ex);
-      res.send({ status: -1 });
+      throw ex;
     }
   }
 };
 
+app.get('/chamados/new', (req, res) => {
+  console.log("Iniciando novo chamado");
+
+  var MongoClient = mongodb.MongoClient;
+  var chamado = { "desc": "viaapi" };
+  console.log("vai conectar;");
+  MongoClient.connect(dbUrl, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("local");
+    dbo.collection(chamadosCollection).insertOne(chamado, function (err, res) {
+      if (err) throw err;
+      console.log("1 document inserted");
+      db.close();
+    });
+  });
+  res.send({ success: true });
+});
+
 app.get('/chamados/close', (req, res) => {
   console.log("Iniciando fechmaento");
-  var osNumber = req.query.osNumber;
   console.log(`os recegida ${osNumber}`);
+  var osNumber = req.query.osNumber;
+  var description = req.query.description;
+  var solution = req.query.solution;
+  var targetEmail = req.query.targetEmail; // TODO
 
-  EmailManager.sendCloseMail("tarapi007@gmail.com", osNumber);
-  ChamadosCrud.fecharChamado(osNumber, res);
+  EmailManager.sendCloseMail("tarapi007@gmail.com", osNumber, clientName, description, solution);
+  ChamadosCrud.fecharChamado(osNumber, solution, res);
+  res.send({ success : true });
   
 });
 
@@ -120,13 +126,10 @@ app.get('/chamados/getAll', (req, res) => {
     if(err) throw err;
     let dbo = db.db('local')
     console.log("Vai comecar a baixaria...");
-    //dbo.collection(chamadosCollection).find({}).toArray();
     dbo.collection(chamadosCollection).find().toArray(function(err, items) {
       console.log(items);
       res.send(items);
     });
-    //console.log(arr);
-    
   })
 });
 
@@ -147,4 +150,4 @@ app.get('/chamados/getOpeneds', (req, res) => {
   })
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => console.log(`Aplicação Iniciada. \n Listening on port ${port}`));
