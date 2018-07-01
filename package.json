@@ -9,8 +9,10 @@
   "dependencies": {
     "axios": "^0.18.0",
     "express": "^4.16.2",
+    "jquery": "^3.3.1",
     "mongodb": "^3.0.10",
-    "nodemailer": "^4.6.5"
+    "nodemailer": "^4.6.5",
+    "react-materialize": "^2.3.3"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"

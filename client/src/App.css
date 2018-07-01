@@ -137,6 +137,7 @@ section.body-componente {
   width: 100px;
   top: 0;
   bottom: 0;
+  padding-top: 3px;
 }
 
 .os-number{
@@ -147,3 +148,30 @@ section.body-componente {
 .btn-fechar-chamado{
   background-color: #2665a6;
 }
+
+#modalFechamento .modal-footer button{
+  width: 100%;
+  background: #2665a6;
+  color: white;
+}
+
+#modalFechamento .modal-footer{
+  position: absolute;
+  bottom: 0;
+}
+
+#modalFechamento .modal-content{
+  bottom: 56px;
+  position: absolute;
+  top: 0;
+}
+
+#modalFechamento .modal-content textarea{
+  height: 80%;
+}
+
+
+#modalFechamento.modal{
+  bottom: 10%;
+}
+

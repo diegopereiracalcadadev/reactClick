@@ -1,7 +1,10 @@
 import React from 'react';
+import {$, jQuery} from 'jquery';
+import {Modal} from 'react-materialize';
 import './App.css';
 import logoimg from "./imgs/logo.jpg";
 import axios from 'axios';
+
 
 class Header extends React.Component {
   render() {
@@ -96,15 +99,15 @@ class ItemChamado extends React.Component {
         <li className="li-chamado">
           <div className="infs-chamado">
             <input type="hidden" name="clientId" value={this.props.clientId} />
-            <p class="os-number">OS-{this.props.osNumber}</p>
+            <p className="os-number">OS-{this.props.osNumber}</p>
             <p className="nome-cliente">{this.props.clientName}</p>
             <p className="desc-chamado">{this.props.description}</p>
           </div>
           
-          <div class="status-chamado">
-            <div class="infs-abertura" style={{marginBottom: 10}}>
+          <div className="status-chamado">
+            <div className="infs-abertura" style={{marginBottom: 10}}>
               <p>Aberto em</p> 
-              <p class="dt-abertura">{this.props.openingDate}</p>
+              <p className="dt-abertura">{this.props.openingDate}</p>
             </div>
             <div style={{marginLeft: 8}}>
               <button 
@@ -162,11 +165,14 @@ class Body extends React.Component {
   render() {
     return (
       <section className="body-componente">
+        <Modal id='modalFechamento' header='Encerramento de Chamado'> <textarea>Teste</textarea> </Modal>
         <ListaChamados />
       </section>
     );
   }
 }
+
+
 
 class Footer extends React.Component {
   render() {
@@ -189,6 +195,13 @@ class App extends React.Component {
     );
   }
 }
+
+/*function abrirModal(){
+  var elems = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(elems, null);
+  var modalFechamento = M.Modal.getInstance(document.getElementById("modalFechamento"));
+  modalFechamento.open()
+}*/
 
 export default App;
 
