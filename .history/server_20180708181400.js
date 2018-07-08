@@ -26,14 +26,14 @@ const EmailManager = {
       html: `
         Informamos que o chamado  <b>OS-${osNumber}</b> está sendo encerrado. 
 
-        <br/><b>Usuário Solicitante:</b>${openingUser}
+        <b>Usuário Solicitante:</b>${openingUser}
 
-        <br/><b>Descrição inicial:</b>${description}
+        <b>Descrição inicial:</b>${description}
 
-        <br/><b>Solução:</b>${solution}
+        <b>Solução:</b>${solution}
 
-        <br/><b>Responda este e-mail caso possamos ajudar em algo mais.</b>
-        <br/>Controle de Qualidade - ClickTI Informática`
+        <b>Responda este e-mail caso possamos ajudar em algo mais.</b>
+        Controle de Qualidade - ClickTI Informática`
     };
   
     transporter.sendMail(mailOptions, function(error, info){
@@ -106,16 +106,16 @@ app.get('/chamados/new', (req, res) => {
 
 app.get('/chamados/close', (req, res) => {
   console.log("Iniciando fechmaento");
-  var osNumber = req.query.osNumber;
-  var openingUser = req.query.openingUser;
-  var openingUserMail = req.query.openingUserMail; // TODO
-  var description = req.query.description;
-  var solution = req.query.solution;
   console.log(`osNumber recegida ${osNumber}`);
   console.log(`openingUser recegida ${openingUser}`);
   console.log(`openingUserMail recegida ${openingUserMail}`);
   console.log(`description recegida ${description}`);
   console.log(`solution recegida ${solution}`);
+  var osNumber = req.query.osNumber;
+  var openingUser = req.query.openingUser;
+  var openingUserMail = req.query.openingUserMail; // TODO
+  var description = req.query.description;
+  var solution = req.query.solution;
 
   EmailManager.sendCloseMail("tarapi007@gmail.com", osNumber, openingUser, description, solution);
   ChamadosCrud.fecharChamado(osNumber, solution, res);

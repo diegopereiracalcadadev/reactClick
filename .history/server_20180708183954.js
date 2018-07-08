@@ -26,14 +26,14 @@ const EmailManager = {
       html: `
         Informamos que o chamado  <b>OS-${osNumber}</b> está sendo encerrado. 
 
-        <br/><b>Usuário Solicitante:</b>${openingUser}
+        <b>Usuário Solicitante:</b>${openingUser}
 
-        <br/><b>Descrição inicial:</b>${description}
+        <b>Descrição inicial:</b>${description}
 
-        <br/><b>Solução:</b>${solution}
+        <b>Solução:</b>${solution}
 
-        <br/><b>Responda este e-mail caso possamos ajudar em algo mais.</b>
-        <br/>Controle de Qualidade - ClickTI Informática`
+        <b>Responda este e-mail caso possamos ajudar em algo mais.</b>
+        Controle de Qualidade - ClickTI Informática`
     };
   
     transporter.sendMail(mailOptions, function(error, info){

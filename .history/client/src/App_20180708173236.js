@@ -162,8 +162,7 @@ class SimpleModal extends React.Component{
     showModal : this.props.showModal,
     osBeingClosed : this.props.osBeingClosed,
     openingUser : "",
-    openingUserMail : "",
-    solution : ""
+    openingUserMail : ""
   }
 
   componentWillReceiveProps(nextProps){
@@ -179,32 +178,33 @@ class SimpleModal extends React.Component{
     console.log("Botão de fechamento de chamado clicado. State atual do SimpleModal:");
     console.log(this.state);
 
-    let chamado = this.state.osBeingClosed;
-    if(!chamado.osNumber) {
-      alert("osnumber nulo");
-      return false;
-    }
+    // let chamado = this.state.osBeingClosed;
+    // if(!chamado.osNumber) {
+    //   alert("osnumber nulo");
+    //   return false;
+    // }
 
-    this.sendCloseRequest(chamado.osNumber, this.state.openingUser, this.state.openingUserMail, chamado.description, this.state.solution)
-        .then(res => {
-          //this.setState({ response: res.status });
-          if(res.status && res.status == 1){
-            this.setState({ show: false });
-            alert(`Solicitação de encerramento do chamado ${chamado.osNumber} finalizada.`);
-          } else {
-            alert("Erro ao tentar fechar o chamado");
-          }
-        })
-        .catch(err => alert(err));
+    // this.sendCloseRequest(chamado.osNumber, openingUser, openingUserMail)
+    //     .then(res => {
+    //       //this.setState({ response: res.status });
+    //       if(res.status == 1){
+    //         this.setState({ show: false });
+    //         alert(`Solicitação de encerramento do chamado ${chamado.osNumber} finalizada.`);
+    //       } else {
+    //         alert("Erro ao tentar fechar o chamado");
+    //       }
+    //     })
+    //     .catch(err => alert(err));
   }
 
-  sendCloseRequest = async (osNumber, openingUser, openingUserMail, description, solution) => {
+  sendCloseRequest = async (osNumber) => {
     console.log("Enviando solicitação de fechamento para a OS: " + osNumber);
-    const response = await fetch(`chamados/close?osNumber=${osNumber}&openingUser=${openingUser}&openingUserMail=${openingUserMail}&description=${description}&solution=${solution}`);
+    const response = await fetch(`chamados/close?osNumber=${osNumber}&openingUser=${}&openingUserMail=${}`);
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
   }
+
 
   render(){  
     return (
@@ -214,21 +214,16 @@ class SimpleModal extends React.Component{
         <div className="simple-modal-dialog">
           <div className="simple-modal-header">
             Fechando OS {this.state.osBeingClosed.osNumber}
-            <button className="close-simple-modal" onClick={() => {this.setState({showModal : false})}}>X</button>
-          </div>
-
+            <button className="close-simple-modal" onClick={() => {this.setState({showModal : false})}}>X</button></div>
           <div className="simple-modal-body">
             <div className="opening-user-container">
               <label>Usuário solicitante</label>
-              <input className="opening-user" onChange={(e) =>{this.setState({openingUser : e.target.value })}} type="text"/>
-              
+              <input class="opening-user" onChange={(e) =>{this.setState({openingUser : e.target.value })}} type="text"/>
               <label>Enviar e-mail de fechamento p/</label>
-              <input className="opening-user-mail" onChange={(e) =>{this.setState({openingUserMail : e.target.value})}} type="text"/>
-              
-              <textarea className="solution" onChange={(e) =>{this.setState({solution : e.target.value})}} ></textarea>
+              <input class="opening-user-mail" onChange={(e) =>{this.setState({openingUserMail : e.target.value})}} type="text"/>
+              <textarea class="solution"></textarea>
             </div>
           </div>
-          
           <div className="simple-modal-footer">
             <button className="btn" onClick={this.handleOnConfirmClick}>Confirmar Fechamento</button>
           </div>

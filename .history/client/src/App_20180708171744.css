@@ -239,12 +239,8 @@ section.body-componente {
   background: #113356;
 }
 
-.opening-user-container {
-  height: 100%;
-}  
-.opening-user-container > textarea {
+.opening-user-container > textarea{
   height: calc(100% - 130px);
 }
-
 /* ---------- FIM MODAL DE FECHAMENTO ----------------*/
 

@@ -179,23 +179,23 @@ class SimpleModal extends React.Component{
     console.log("Botão de fechamento de chamado clicado. State atual do SimpleModal:");
     console.log(this.state);
 
-    let chamado = this.state.osBeingClosed;
-    if(!chamado.osNumber) {
-      alert("osnumber nulo");
-      return false;
-    }
+    // let chamado = this.state.osBeingClosed;
+    // if(!chamado.osNumber) {
+    //   alert("osnumber nulo");
+    //   return false;
+    // }
 
-    this.sendCloseRequest(chamado.osNumber, this.state.openingUser, this.state.openingUserMail, chamado.description, this.state.solution)
-        .then(res => {
-          //this.setState({ response: res.status });
-          if(res.status && res.status == 1){
-            this.setState({ show: false });
-            alert(`Solicitação de encerramento do chamado ${chamado.osNumber} finalizada.`);
-          } else {
-            alert("Erro ao tentar fechar o chamado");
-          }
-        })
-        .catch(err => alert(err));
+    // this.sendCloseRequest(chamado.osNumber, this.state.openingUser, this.state.openingUserMail, chamado.description, this.state.solution)
+    //     .then(res => {
+    //       //this.setState({ response: res.status });
+    //       if(res.status && res.status == 1){
+    //         this.setState({ show: false });
+    //         alert(`Solicitação de encerramento do chamado ${chamado.osNumber} finalizada.`);
+    //       } else {
+    //         alert("Erro ao tentar fechar o chamado");
+    //       }
+    //     })
+    //     .catch(err => alert(err));
   }
 
   sendCloseRequest = async (osNumber, openingUser, openingUserMail, description, solution) => {
