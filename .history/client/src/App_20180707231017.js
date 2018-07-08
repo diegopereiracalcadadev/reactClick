@@ -30,6 +30,7 @@ class Header extends React.Component {
   }
 }
 
+
 class ItemChamado extends React.Component {
   state = {
     response: '',
@@ -50,7 +51,7 @@ class ItemChamado extends React.Component {
     this.state.comments = props.comments;
     this.state.openingDate = props.openingDate;
     this.state.closingDate = props.closingDate;
-    this.handleOnClick = this.handleOnClick.bind(this);
+    //this.fecharChamado = this.fecharChamado.bind(this);
   }
 
   sendCloseRequest = async (osNumber) => {
@@ -62,7 +63,12 @@ class ItemChamado extends React.Component {
     return body;
   }
 
-  fecharChamado = () => {
+  fecharChamado = (props, thiss) => {
+    console.log("this");
+    console.log(thiss);
+    console.log("this.props");
+    console.log(props);
+    abrirModal(props, thiss);
     // console.log("Botão de fechar chamado apertado: ");
     // let chamado = this.props;
     // console.log(chamado);
@@ -85,9 +91,13 @@ class ItemChamado extends React.Component {
   }
 
   handleOnClick = ()=>{
-    console.log("ItemChamado - handleOnClick invoked");
+    // if(window.confirm(`Tem certeza de que deseja fechar o chamado ${this.props.osNumber} ?`)){
+    //   this.fecharChamado();
+    // }
+    console.log("this.state");
     console.log(this.state);
-    this.props.tryToCloseOs(this.state);
+    // this.fecharChamado(this.props, this);
+    this.props.updateModalInfs(this.state);
   }
 
   render() {
@@ -121,44 +131,40 @@ class ItemChamado extends React.Component {
 
 
 class ListaChamados extends React.Component {
-  state = {
-    chamados : [],
-      showModal : false,
-      modalTitle : "",
-      modalBody : "",
-      osBeingClosed : 0
-  }
-
   constructor(props) {
     super(props);
-    this.tryToCloseOs = this.tryToCloseOs.bind(this);
+    this.state = {
+      chamados : [],
+      showModal : false,
+      modalTitle : "",
+      modalBody : "" 
+    }
   }
   
+  //    this.setState({"id":"id111", "clientName" :"cliente 1 porra funcionou!!"});
+    
+
   componentDidMount() {
     axios.get(`chamados/getOpeneds`)
       .then(res => {
-        console.log("axios.get(`chamados/getOpeneds`) executado com sucesso");
+        console.log("did mounted");
         console.log(res)
         const chamados = res.data;
         this.setState({ chamados });
       });
   }
 
-  tryToCloseOs(chamado){
-    console.log("tryToCloseOs invoked");
-    console.log(chamado);
+  tryToCloseOs(){
     this.setState({
       showModal : true,
-      osBeingClosed : chamado.osNumber
+      modalTitle : 
     })
   }
 
   render() {
     return (
       <div>
-        <SimpleModal 
-            showModal={this.state.showModal} 
-            osBeingClosed={this.state.osBeingClosed} />
+        <SimpleModal showModal={this.state.showModal} modalTitle={this.state.modalTitle} modalBody={this.state.modalBody} />
         <ul className="ul-chamados">
           {this.state.chamados.map(chamado =>
               <ItemChamado _id_={chamado.id}
@@ -193,32 +199,28 @@ class Body extends React.Component {
 class SimpleModal extends React.Component{
   state = {
     showModal : this.props.showModal,
-    osBeingClosed : this.props.osBeingClosed,
+    osNumber : this.props.osNumber
   }
 
   componentWillReceiveProps(nextProps){
     console.log("componentWillReceiveProps chamado");
       this.setState({
         showModal : nextProps.showModal,
-        osBeingClosed : nextProps.osBeingClosed
+        modalTitle : nextProps.modalTitle
       });
   }
 
-  render(){  
+  render(){
     return (
       this.state.showModal
       ?
       <div className="simple-modal-dimmed-bg">
         <div className="simple-modal-dialog">
-          <div className="simple-modal-header">
-            Fechando OS {this.state.osBeingClosed}
-            <button className="close-simple-modal" onClick={() => {this.setState({showModal : false})}}>X</button></div>
+          <div className="simple-modal-header">Fechando OS {this.state.osNumber}</div>
           <div className="simple-modal-body">
             <textarea></textarea>
           </div>
-          <div className="simple-modal-footer">
-            <button className="btn">Confirmar Fechamento</button>
-          </div>
+          <div className="simple-modal-footer"></div>
         </div>
       </div>
       :
@@ -231,6 +233,7 @@ class Footer extends React.Component {
   render() {
     return (
       <footer className="footer-component">
+
       </footer>
     );
   }
@@ -246,6 +249,15 @@ class App extends React.Component {
       </div>
     );
   }
+}
+
+function abrirModal(chamado, thiss){
+  console.log("thiss");
+  console.log(thiss);
+  thiss.setState({
+    "osNumber" : 999
+  });
+  //$("#modalFechamento").modal("open");
 }
 
 export default App;

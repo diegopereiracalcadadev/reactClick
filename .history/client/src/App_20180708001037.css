@@ -169,7 +169,7 @@ section.body-componente {
 .btn-fechar-chamado:hover,
 .btn-fechar-chamado:active,
 .btn-fechar-chamado:focus{
-  background-color: #113356;
+  background-color: #2665a6;
 }
 
 /* -------------------------------------------------*/
@@ -236,7 +236,7 @@ section.body-componente {
 .simple-modal-footer button:hover,
 .simple-modal-footer button:focus{
   width: 100%;
-  background: #113356;
+  background: black;
 }
 
 

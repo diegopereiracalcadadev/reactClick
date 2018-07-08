@@ -236,7 +236,7 @@ section.body-componente {
 .simple-modal-footer button:hover,
 .simple-modal-footer button:focus{
   width: 100%;
-  background: #113356;
+  background: black;
 }
 
 

@@ -165,11 +165,8 @@ section.body-componente {
   font-size: 10px;
 }
 
-.btn-fechar-chamado,
-.btn-fechar-chamado:hover,
-.btn-fechar-chamado:active,
-.btn-fechar-chamado:focus{
-  background-color: #113356;
+.btn-fechar-chamado{
+  background-color: #2665a6;
 }
 
 /* -------------------------------------------------*/
@@ -200,25 +197,13 @@ section.body-componente {
 }
 
 .simple-modal-header{
-  position: relative;
-  background: #464646;
+  background: black;
   height: 50px;
   color: white;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.simple-modal-header button.close-simple-modal{
-  background: transparent;
-  border: none;
-  color: white;
-  cursor: pointer;
-  position: absolute;
-  right: 12px;
-  top: 9px;
-  font-size: 20px;
-  font-weight: 600;
 }
 
 .simple-modal-body{
@@ -231,14 +216,9 @@ section.body-componente {
   padding-left: 20px;
   padding-right: 20px;
 }
-.simple-modal-footer button,
-.simple-modal-footer button:active,
-.simple-modal-footer button:hover,
-.simple-modal-footer button:focus{
+.simple-modal-footer button {
   width: 100%;
-  background: #113356;
 }
-
 
 .simple-modal-body > textarea{
   height: 100%;

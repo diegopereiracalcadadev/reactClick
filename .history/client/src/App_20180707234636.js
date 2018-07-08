@@ -30,6 +30,7 @@ class Header extends React.Component {
   }
 }
 
+
 class ItemChamado extends React.Component {
   state = {
     response: '',
@@ -50,6 +51,7 @@ class ItemChamado extends React.Component {
     this.state.comments = props.comments;
     this.state.openingDate = props.openingDate;
     this.state.closingDate = props.closingDate;
+    //this.fecharChamado = this.fecharChamado.bind(this);
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
@@ -85,8 +87,12 @@ class ItemChamado extends React.Component {
   }
 
   handleOnClick = ()=>{
-    console.log("ItemChamado - handleOnClick invoked");
+    // if(window.confirm(`Tem certeza de que deseja fechar o chamado ${this.props.osNumber} ?`)){
+    //   this.fecharChamado();
+    // }
+    console.log("this.state");
     console.log(this.state);
+    // this.fecharChamado(this.props, this);
     this.props.tryToCloseOs(this.state);
   }
 
@@ -121,44 +127,40 @@ class ItemChamado extends React.Component {
 
 
 class ListaChamados extends React.Component {
-  state = {
-    chamados : [],
-      showModal : false,
-      modalTitle : "",
-      modalBody : "",
-      osBeingClosed : 0
-  }
-
   constructor(props) {
     super(props);
+    this.state = {
+      chamados : [],
+      showModal : false,
+      modalTitle : "",
+      modalBody : "" 
+    }
     this.tryToCloseOs = this.tryToCloseOs.bind(this);
   }
   
+  //    this.setState({"id":"id111", "clientName" :"cliente 1 porra funcionou!!"});
+    
+
   componentDidMount() {
     axios.get(`chamados/getOpeneds`)
       .then(res => {
-        console.log("axios.get(`chamados/getOpeneds`) executado com sucesso");
+        console.log("did mounted");
         console.log(res)
         const chamados = res.data;
         this.setState({ chamados });
       });
   }
 
-  tryToCloseOs(chamado){
-    console.log("tryToCloseOs invoked");
-    console.log(chamado);
+  tryToCloseOs(){
     this.setState({
-      showModal : true,
-      osBeingClosed : chamado.osNumber
+      showModal : true
     })
   }
 
   render() {
     return (
       <div>
-        <SimpleModal 
-            showModal={this.state.showModal} 
-            osBeingClosed={this.state.osBeingClosed} />
+        <SimpleModal showModal={this.state.showModal} modalTitle={this.state.modalTitle} modalBody={this.state.modalBody} />
         <ul className="ul-chamados">
           {this.state.chamados.map(chamado =>
               <ItemChamado _id_={chamado.id}
@@ -193,14 +195,14 @@ class Body extends React.Component {
 class SimpleModal extends React.Component{
   state = {
     showModal : this.props.showModal,
-    osBeingClosed : this.props.osBeingClosed,
+    osNumber : this.props.osNumber
   }
 
   componentWillReceiveProps(nextProps){
     console.log("componentWillReceiveProps chamado");
       this.setState({
         showModal : nextProps.showModal,
-        osBeingClosed : nextProps.osBeingClosed
+        osNumber : nextProps.osNumber
       });
   }
 
@@ -210,14 +212,12 @@ class SimpleModal extends React.Component{
       ?
       <div className="simple-modal-dimmed-bg">
         <div className="simple-modal-dialog">
-          <div className="simple-modal-header">
-            Fechando OS {this.state.osBeingClosed}
-            <button className="close-simple-modal" onClick={() => {this.setState({showModal : false})}}>X</button></div>
+          <div className="simple-modal-header">Fechando OS {this.state.osNumber}</div>
           <div className="simple-modal-body">
             <textarea></textarea>
           </div>
           <div className="simple-modal-footer">
-            <button className="btn">Confirmar Fechamento</button>
+            <button class="btn">Confirmar Fechamento</button>
           </div>
         </div>
       </div>

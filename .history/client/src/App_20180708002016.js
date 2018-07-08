@@ -30,6 +30,7 @@ class Header extends React.Component {
   }
 }
 
+
 class ItemChamado extends React.Component {
   state = {
     response: '',
@@ -50,6 +51,7 @@ class ItemChamado extends React.Component {
     this.state.comments = props.comments;
     this.state.openingDate = props.openingDate;
     this.state.closingDate = props.closingDate;
+    //this.fecharChamado = this.fecharChamado.bind(this);
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
