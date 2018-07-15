@@ -3,6 +3,7 @@ import {$, jQuery} from 'jquery';
 import {Modal} from 'react-materialize';
 import './App.css';
 import logoimg from "./imgs/logo.jpg";
+import loadingImgSrc from "./imgs/loading-plasma.gif";
 import axios from 'axios';
 
 
@@ -93,14 +94,16 @@ class ListaChamados extends React.Component {
       showModal : false,
       modalTitle : "",
       modalBody : "",
-      osBeingClosed : 0
+      osBeingClosed : 0,
+      isLoading: true,
+      isInError: false
   }
 
   constructor(props) {
     super(props);
     this.tryToCloseOs = this.tryToCloseOs.bind(this);
   }
-  
+
   componentDidMount() {
     axios.get(`chamados/getOpeneds`)
       .then(res => {
@@ -108,6 +111,9 @@ class ListaChamados extends React.Component {
         console.log(res)
         const chamados = res.data;
         this.setState({ chamados });
+      })
+      .catch((error) => {
+        this.setState({isLoading : false, isInError : true});
       });
   }
 
@@ -122,6 +128,10 @@ class ListaChamados extends React.Component {
 
   render() {
     return (
+      this.state.isLoading === true || this.state.isInError === true  
+      ?
+      this.state.isLoading ? <LoadingGif /> : <ErrorLoadingOrders />
+      :
       <div>
         <SimpleModal 
             showModal={this.state.showModal} 
@@ -144,6 +154,37 @@ class ListaChamados extends React.Component {
         </ul>
       </div>
     );
+  }
+}
+
+class LoadingGif extends React.Component {
+  render(){
+    return (
+      <div className="container-loading">
+        <p>Aguarde...</p>
+        <img className="loading-img" src={loadingImgSrc} alt="Carregando..." />
+      </div>
+    )
+  }
+}
+
+class ErrorLoadingOrders extends React.Component {
+  errorStyle = {
+    textAlign: "center",
+    marginTop: 60,
+    color: "white",
+    fontWeight: 700,
+    fontSize: 20,
+    background: "#ff0000a8",
+    padding: "20px 0"
+  }
+  render(){
+    return (
+      <div style={this.errorStyle}>
+        <p>Erro ao listar os chamados...</p>
+        <p>Tente novamente em instantes</p>
+      </div>
+    )
   }
 }
 
@@ -175,7 +216,7 @@ class SimpleModal extends React.Component{
   }
 
   
-  handleOnConfirmClick = () => {
+  handleOnConfirmClick = () => { 
     console.log("Botão de fechamento de chamado clicado. State atual do SimpleModal:");
     console.log(this.state);
 
