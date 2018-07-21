@@ -41,16 +41,19 @@ class ItemChamado extends React.Component {
     console.log("ItemChamado Constuctor invoked");
     super(props);
     
-    this.state._id = props._id;
-    this.state.osNumber = props.osNumber;
-    this.state.status = props.status;
-    this.state.clientId = props.clientId;
-    this.state.clientName = props.clientName;
-    this.state.description = props.description;
-    this.state.solution = props.solution;
-    this.state.comments = props.comments;
-    this.state.openingDate = props.openingDate;
-    this.state.closingDate = props.closingDate;
+    this.state._id = props.chamado._id;
+    this.state.osNumber = props.chamado.osNumber;
+    this.state.status = props.chamado.status;
+    this.state.clientId = props.chamado.clientId;
+    this.state.clientName = props.chamado.clientName;
+    this.state.openingUser = props.chamado.openingUser;
+    this.state.openingDate = props.chamado.openingDate;
+    this.state.description = props.chamado.description;
+    this.state.comments = props.chamado.comments;
+    this.state.mailTo = props.chamado.mailTo;
+    this.state.closingDate = props.chamado.closingDate;
+    this.state.solution = props.chamado.solution;
+
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
@@ -65,16 +68,16 @@ class ItemChamado extends React.Component {
       this.state.show ?
         <li className="li-chamado">
           <div className="infs-chamado">
-            <input type="hidden" name="clientId" value={this.props.clientId} />
-            <p className="os-number">OS-{this.props.osNumber}</p>
-            <p className="nome-cliente">{this.props.clientName}</p>
-            <p className="desc-chamado">{this.props.description}</p>
+            <input type="hidden" name="clientId" value={this.state.clientId} />
+            <p className="os-number">OS-{this.state.osNumber}</p>
+            <p className="nome-cliente">{this.state.clientName}</p>
+            <p className="desc-chamado">{this.state.description}</p>
           </div>
           
           <div className="status-chamado">
             <div className="infs-abertura" style={{marginBottom: 10}}>
               <p>Aberto em</p> 
-              <p className="dt-abertura">{this.props.openingDate}</p>
+              <p className="dt-abertura">{this.state.openingDate}</p>
             </div>
             <div style={{marginLeft: 8}}>
               <button 
@@ -91,12 +94,12 @@ class ItemChamado extends React.Component {
 class ListaChamados extends React.Component {
   state = {
     chamados : [],
-      showModal : false,
-      modalTitle : "",
-      modalBody : "",
-      osBeingClosed : 0,
-      isLoading: true,
-      isInError: false
+    showModal : false,
+    modalTitle : "",
+    modalBody : "",
+    osBeingClosed : 0,
+    isLoading: true,
+    isInError: false
   }
 
   constructor(props) {
@@ -107,10 +110,9 @@ class ListaChamados extends React.Component {
   componentDidMount() {
     axios.get(`chamados/getOpeneds`)
       .then(res => {
-        console.log("axios.get(`chamados/getOpeneds`) executado com sucesso");
+        console.log("axios.get(`chamados/getOpeneds`) retornou com sucesso");
         console.log(res)
-        const chamados = res.data;
-        this.setState({ chamados });
+        this.setState({ chamados : res.data, isLoading : false });
       })
       .catch((error) => {
         this.setState({isLoading : false, isInError : true});
@@ -138,18 +140,8 @@ class ListaChamados extends React.Component {
             osBeingClosed={this.state.osBeingClosed} />
         <ul className="ul-chamados">
           {this.state.chamados.map(chamado =>
-              <ItemChamado _id_={chamado.id}
-                  osNumber = {chamado.osNumber}
-                  status = {chamado.status}
-                  clientId = {chamado.clientId}
-                  clientName = {chamado.clientName}
-                  description = {chamado.description}
-                  solution = {chamado.solution}
-                  comments = {chamado.comments}
-                  openingDate = {chamado.openingDate}
-                  closingDate = {chamado.closingDate}
-                  tryToCloseOs = {this.tryToCloseOs}
-                  />
+              <ItemChamado chamado={chamado} 
+                  tryToCloseOs = {this.tryToCloseOs}/>
             )}
         </ul>
       </div>
@@ -202,9 +194,6 @@ class SimpleModal extends React.Component{
   state = {
     showModal : this.props.showModal,
     osBeingClosed : this.props.osBeingClosed,
-    openingUser : "",
-    openingUserMail : "",
-    solution : ""
   }
 
   componentWillReceiveProps(nextProps){
@@ -220,18 +209,18 @@ class SimpleModal extends React.Component{
     console.log("Botão de fechamento de chamado clicado. State atual do SimpleModal:");
     console.log(this.state);
 
-    let chamado = this.state.osBeingClosed;
-    if(!chamado.osNumber) {
+    let osBeingClosed = this.state.osBeingClosed;
+    if(!osBeingClosed.osNumber) {
       alert("osnumber nulo");
       return false;
     }
 
-    this.sendCloseRequest(chamado.osNumber, this.state.openingUser, this.state.openingUserMail, chamado.description, this.state.solution)
+    this.sendCloseRequest(osBeingClosed)
         .then(res => {
           //this.setState({ response: res.status });
-          if(res.status && res.status == 1){
+          if(res.success && res.success == true){
             this.setState({ show: false });
-            alert(`Solicitação de encerramento do chamado ${chamado.osNumber} finalizada.`);
+            alert(`Solicitação de encerramento do chamado ${osBeingClosed.osNumber} finalizada.`);
           } else {
             alert("Erro ao tentar fechar o chamado");
           }
@@ -239,9 +228,9 @@ class SimpleModal extends React.Component{
         .catch(err => alert(err));
   }
 
-  sendCloseRequest = async (osNumber, openingUser, openingUserMail, description, solution) => {
-    console.log("Enviando solicitação de fechamento para a OS: " + osNumber);
-    const response = await fetch(`chamados/close?osNumber=${osNumber}&openingUser=${openingUser}&openingUserMail=${openingUserMail}&description=${description}&solution=${solution}`);
+  sendCloseRequest = async (osBeingClosed) => {
+    console.log("Enviando solicitação de fechamento para a OS: " + osBeingClosed.osNumber);
+    const response = await fetch(`chamados/close?_id=${osBeingClosed._id}&osNumber=${osBeingClosed.osNumber}&openingUser=${osBeingClosed.openingUser}&mailTo=${osBeingClosed.mailTo}&solution=${osBeingClosed.solution}`);
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
@@ -261,12 +250,28 @@ class SimpleModal extends React.Component{
           <div className="simple-modal-body">
             <div className="opening-user-container">
               <label>Usuário solicitante</label>
-              <input className="opening-user" onChange={(e) =>{this.setState({openingUser : e.target.value })}} type="text"/>
+              <input className="opening-user" value={this.state.osBeingClosed.openingUser} onChange={(e) =>{
+                  var newOpeningUser =  e.target.value;
+                  var newOsBeingClosed = this.state.osBeingClosed;
+                  newOsBeingClosed.openingUser = newOpeningUser;
+                  this.setState({osBeingClosed : newOsBeingClosed });
+                  console.log(this.state);
+                }} type="text"/>
               
-              <label>Enviar e-mail de fechamento p/</label>
-              <input className="opening-user-mail" onChange={(e) =>{this.setState({openingUserMail : e.target.value})}} type="text"/>
+              <label>Enviar e-mail de fechamento p/ ( , para + )</label>
+              <input className="mail-to" value={this.state.osBeingClosed.mailTo}  onChange={(e) =>{
+                  var newMailTo =  e.target.value;
+                  var newOsBeingClosed = this.state.osBeingClosed;
+                  newOsBeingClosed.mailTo = newMailTo;
+                  this.setState({osBeingClosed : newOsBeingClosed });
+                }} type="text"/>
               
-              <textarea className="solution" onChange={(e) =>{this.setState({solution : e.target.value})}} ></textarea>
+              <textarea className="solution" onChange={(e) =>{
+                  var newSolution =  e.target.value;
+                  var newOsBeingClosed = this.state.osBeingClosed;
+                  newOsBeingClosed.solution = newSolution;
+                  this.setState({osBeingClosed : newOsBeingClosed });
+                }} ></textarea>
             </div>
           </div>
           

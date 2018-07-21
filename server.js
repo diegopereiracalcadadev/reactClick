@@ -24,7 +24,9 @@ const EmailManager = {
       to: target,
       subject: `Encerramento do chamado OS-${osNumber} - ClickTI Informática`, 
       html: `
-        Informamos que o chamado  <b>OS-${osNumber}</b> está sendo encerrado. 
+        Olá!
+
+        Informamos que o chamado de <b>número ${osNumber}</b> vai ser encerrado. 
 
         <br/><b>Usuário Solicitante:</b>${openingUser}
 
@@ -47,41 +49,33 @@ const EmailManager = {
 };
 
 const ChamadosCrud = {
-  fecharChamado : (osNumber, solution, res) => {
+  fecharChamado : (_id, osNumber, openingUser, mailTo, solution, res, callBack) => {
     try{
+      console.log("|---    Iniciando método fecharChamado    ---|");
+      console.log("Parâmetro recebidos : (_id, openingUser, mailTo, solution):");
+      console.log((_id + " - " + openingUser + " - " + mailTo + " - " + solution));
       var MongoClient = mongodb.MongoClient;
-      console.log("vai conectar;");
       
       MongoClient.connect(dbUrl, function (err, db) {
+        console.log("Iniciando processamento do método MongoClient.connect");
         if (err) throw err;
         var dbo = db.db("local");
-        dbo.collection(chamadosCollection).update(
-            { 
-              "osNumber": parseInt(osNumber) 
-            },
-            {
-              $currentDate: 
-                  {
-                    closeDate: true
-                  },
-              $set:
-                  {
-                    "status" : 1,
-                    "solution" : solution
-                  }
-            },
-            {
-              "upsert": false,  // insert a new document, if no existing document match the query 
-              "multi": false  // update only one document 
-            }
-        );
-        console.log("Update com sucesso -  " + new Date());
+        console.log("Tentando realizar o update... - método fecharChamado");
+        var myquery =  { "osNumber" : parseInt(osNumber) };
+        var newvalues = { $set: {"status" : 1, 
+                                "openingUser" : openingUser,
+                                "mailTo" : mailTo,
+                                "solution" : solution} };
+        dbo.collection("chamados").updateOne(myquery, newvalues, function(err, res) {
+          if (err) throw err;
+          console.log("1 document updated");
+          db.close();
+        });
       });
       console.log("Finalizando fechamento");  
-      res.send({ status: 1 });
     } catch (ex){
+      console.log("Erro finalizando fechamento.");  
       console.log(ex);
-      throw ex;
     }
   }
 };
@@ -105,21 +99,22 @@ app.get('/chamados/new', (req, res) => {
 });
 
 app.get('/chamados/close', (req, res) => {
-  console.log("Iniciando fechmaento");
+  console.log("|---    Iniciando processamento da requisição GET em: /chamados/close    ---|");
+  var _id = req.query._id;
   var osNumber = req.query.osNumber;
   var openingUser = req.query.openingUser;
-  var openingUserMail = req.query.openingUserMail; // TODO
-  var description = req.query.description;
+  var mailTo = req.query.mailTo;
   var solution = req.query.solution;
-  console.log(`osNumber recegida ${osNumber}`);
-  console.log(`openingUser recegida ${openingUser}`);
-  console.log(`openingUserMail recegida ${openingUserMail}`);
-  console.log(`description recegida ${description}`);
-  console.log(`solution recegida ${solution}`);
+  console.log(req.query);
 
-  EmailManager.sendCloseMail("tarapi007@gmail.com", osNumber, openingUser, description, solution);
-  ChamadosCrud.fecharChamado(osNumber, solution, res);
+  var chamado = ChamadosCrud.fecharChamado(_id, osNumber, openingUser, mailTo, solution, res, (chamado)=>{
+    console.log("Chamado atualizado: ");
+    console.log(chamado);
+  });
   res.send({ success : true });
+  
+  //EmailManager.sendCloseMail(mailTo, chamado);
+  
   
 });
 
@@ -130,6 +125,8 @@ app.get('/chamados/getAll', (req, res) => {
     if(err) throw err;
     let dbo = db.db('local')
     dbo.collection(chamadosCollection).find().toArray(function(err, items) {
+      console.log("Finalizada recuperação dos chamados.  get-'/chamados/getAll' ");
+      console.log(items);
       res.send(items);
     });
   })
@@ -142,6 +139,8 @@ app.get('/chamados/getOpeneds', (req, res) => {
     if(err) throw err;
     let dbo = db.db('local')
     dbo.collection(chamadosCollection).find({status : 0}).toArray(function(err, items) {
+      console.log("Finalizada recuperação dos chamados.  get-'/chamados/getOpeneds' ");
+      console.log(items);
       res.send(items);
     });
   })

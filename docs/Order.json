@@ -1,0 +1,14 @@
+{
+    "_id" : ObjectId("5b37ea8d1a49ccc65240fdea"),
+    "osNumber" : 1001,
+    "status" : 0,
+    "clientId" : 902,
+    "clientName" : "Bibi Barra",
+    "openingUser" : "openingUser Bibi Barra",
+    "openingDate" : "2018-06-10T05:14:17.179Z",
+    "description" : "Computador  não está ligando.",
+    "comments" : [],
+    "sendMailTo" : "tarapi007@gmail.com",
+    "closingDate" : ISODate("2018-06-30T22:42:18.768Z"),
+    "solution" : ""
+}
