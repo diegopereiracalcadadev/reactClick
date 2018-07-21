@@ -1,0 +1,1 @@
+db.getCollection('chamados').update({"status" : 1},{$set : {"status" : 0}})
