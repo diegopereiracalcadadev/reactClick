@@ -112,7 +112,11 @@ class ListaChamados extends React.Component {
       .then(res => {
         console.log("axios.get(`chamados/getOpeneds`) retornou com sucesso");
         console.log(res)
-        this.setState({ chamados : res.data, isLoading : false });
+        if(res.data.length === 0){
+          this.setState({ chamados : res.data, isLoading : false });
+        } else {
+          this.setState({ chamados : res.data, isLoading : false });
+        }
       })
       .catch((error) => {
         this.setState({isLoading : false, isInError : true});
@@ -139,10 +143,15 @@ class ListaChamados extends React.Component {
             showModal={this.state.showModal} 
             osBeingClosed={this.state.osBeingClosed} />
         <ul className="ul-chamados">
-          {this.state.chamados.map(chamado =>
-              <ItemChamado chamado={chamado} 
-                  tryToCloseOs = {this.tryToCloseOs}/>
-            )}
+          {
+            this.state.chamados.length === 0 ?
+              <div>Não há chamados abertos</div>
+            :
+              this.state.chamados.map(chamado =>
+                <ItemChamado chamado={chamado} 
+                tryToCloseOs = {this.tryToCloseOs}/>
+              )
+          }
         </ul>
       </div>
     );
@@ -219,8 +228,9 @@ class SimpleModal extends React.Component{
         .then(res => {
           //this.setState({ response: res.status });
           if(res.success && res.success == true){
-            this.setState({ show: false });
+            // this.setState({ show: false });
             alert(`Chamado ${osBeingClosed.osNumber} fechado com sucesso.`);
+            window.location.reload();
           } else {
             alert("Erro ao tentar fechar o chamado");
           }
