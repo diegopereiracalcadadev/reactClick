@@ -5,6 +5,7 @@ import './App.css';
 import logoimg from "./imgs/logo.jpg";
 import loadingImgSrc from "./imgs/loading-plasma.gif";
 import axios from 'axios';
+import Moment from 'react-moment';
 
 
 class Header extends React.Component {
@@ -80,7 +81,7 @@ class ItemChamado extends React.Component {
           <div className="status-chamado">
             <div className="infs-abertura" style={{marginBottom: 10}}>
               <p>Aberto em</p> 
-              <p className="dt-abertura">{this.state.openingDate}</p>
+              <p className="dt-abertura"><Moment locale="pt-br" format="DD/MM/YYYY">{this.state.openingDate}</Moment></p>
             </div>
             <div style={{marginLeft: 8}}>
               <button 
