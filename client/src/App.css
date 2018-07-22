@@ -24,6 +24,11 @@
   background: #777676
 }
 
+.btn-desativado{
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /*----------------FIM COMMONS -----------------*/
 
 .menu-container-logo {
@@ -79,7 +84,7 @@ header.header-componente span {
 
 section.body-componente {
   position: absolute;
-  top: 56px;
+  top: 64px;
   bottom: 0;
   width: 100%;
 }
@@ -177,7 +182,6 @@ section.body-componente {
 /* -------------MODAL DE FECHAMENTO ----------------*/
 /* -------------------------------------------------*/
 /* -------------------------------------------------*/
-
 .simple-modal-dimmed-bg { 
   position: fixed;
   top: 0;
@@ -196,54 +200,83 @@ section.body-componente {
   width: 70%;
   height: 90%;
   background: white;
-  border-radius: 6px;
 }
 
+/* -------------HEADER ----------------*/
 .simple-modal-header{
   position: relative;
   background: #464646;
   height: 50px;
   color: white;
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.simple-modal-header button.close-simple-modal{
+
+.simple-modal-header-infs{
+  height: 100%;
+  width: calc(100% - 50px);
+  text-align: center;
+  padding: 6px 10px;
+}
+
+.simple-modal-header-infs p{
+  margin: 0;
+}
+
+.simple-modal-header .btn-area-close-modal{
+  width: 50px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items:  center;
+  cursor: pointer;
+}
+.simple-modal-header .btn-area-close-modal:hover {
+  background: rgb(119, 119, 119);
+}  
+
+.simple-modal-header .btn-area-close-modal button{
   background: transparent;
   border: none;
   color: white;
   cursor: pointer;
-  position: absolute;
-  right: 12px;
-  top: 9px;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 25px;
+  font-weight: 700;
+  padding-bottom: 7px;
 }
 
+.topbar .btn-refresh{
+  height: 100%;
+  padding: 0 20px;
+} 
+
+/* -------------BODY ----------------*/
 .simple-modal-body{
   height: calc(100% - 100px);
-  padding: 20px;
+  padding: 10px 20px;
 }
 
+/* -------------FOOTER ----------------*/
 .simple-modal-footer{
   height: 50px;
-  padding-left: 20px;
-  padding-right: 20px;
 }
+
 .simple-modal-footer button,
 .simple-modal-footer button:active,
 .simple-modal-footer button:hover,
 .simple-modal-footer button:focus{
   width: 100%;
+  height: 100%;
   background: #113356;
 }
 
 .opening-user-container {
   height: 100%;
-}  
+} 
+
 .opening-user-container > textarea {
-  height: calc(100% - 130px);
+  height: calc(100% - 162px);
 }
 
 /* ---------- FIM MODAL DE FECHAMENTO ----------------*/

@@ -15,6 +15,9 @@ class Header extends React.Component {
           <i className="material-icons">menu</i>
         </a>
         <span>Chamados Abertos</span>
+        <a class="btn-refresh right" href="javascript:window.location.reload()">
+          <i className="material-icons">refresh</i>
+        </a>
         <ul id="slide-out" className="sidenav">
           <div className="menu-container-logo">
             <img className="logo-img" src={logoimg} alt="Logo ClickTI" />
@@ -203,6 +206,7 @@ class SimpleModal extends React.Component{
   state = {
     showModal : this.props.showModal,
     osBeingClosed : this.props.osBeingClosed,
+    isCloseBtnActive : true
   }
 
   componentWillReceiveProps(nextProps){
@@ -214,33 +218,37 @@ class SimpleModal extends React.Component{
   }
 
   
-  handleOnConfirmClick = () => { 
-    console.log("Botão de fechamento de chamado clicado. State atual do SimpleModal:");
-    console.log(this.state);
-
-    let osBeingClosed = this.state.osBeingClosed;
-    if(!osBeingClosed.osNumber) {
-      alert("osnumber nulo");
-      return false;
+  handleOnConfirmClick = () => {
+    if(this.state.isCloseBtnActive){
+      console.log("Botão de fechamento de chamado clicado."); 
+      this.setState({isCloseBtnActive : false});
+      console.log(" State atual do SimpleModal:");
+      console.log(this.state);
+      
+      let osBeingClosed = this.state.osBeingClosed;
+      if(!osBeingClosed.osNumber) {
+        alert("osnumber nulo");
+        return false;
+      }
+      
+      this.sendCloseRequest(osBeingClosed)
+      .then(res => {
+        //this.setState({ response: res.status });
+        if(res.success && res.success == true){
+          // this.setState({ show: false });
+          alert(`Chamado ${osBeingClosed.osNumber} fechado com sucesso.`);
+          window.location.reload();
+        } else {
+          alert("Erro ao tentar fechar o chamado");
+        }
+      })
+      .catch(err => alert(err));
     }
-
-    this.sendCloseRequest(osBeingClosed)
-        .then(res => {
-          //this.setState({ response: res.status });
-          if(res.success && res.success == true){
-            // this.setState({ show: false });
-            alert(`Chamado ${osBeingClosed.osNumber} fechado com sucesso.`);
-            window.location.reload();
-          } else {
-            alert("Erro ao tentar fechar o chamado");
-          }
-        })
-        .catch(err => alert(err));
   }
-
+  
   sendCloseRequest = async (osBeingClosed) => {
     console.log("Enviando solicitação de fechamento para a OS: " + osBeingClosed.osNumber);
-    const response = await fetch(`chamados/close?_id=${osBeingClosed._id}&osNumber=${osBeingClosed.osNumber}&openingUser=${osBeingClosed.openingUser}&mailTo=${osBeingClosed.mailTo}&solution=${osBeingClosed.solution}`);
+    const response = await fetch(`chamados/close?_id=${osBeingClosed._id}&osNumber=${osBeingClosed.osNumber}&openingUser=${osBeingClosed.openingUser}&mailTo=${osBeingClosed.mailTo}&description=${osBeingClosed.description}&solution=${osBeingClosed.solution}`);
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
@@ -252,11 +260,19 @@ class SimpleModal extends React.Component{
       ?
       <div className="simple-modal-dimmed-bg">
         <div className="simple-modal-dialog">
-          <div className="simple-modal-header">
-            Fechando OS {this.state.osBeingClosed.osNumber}
-            <button className="close-simple-modal" onClick={() => {this.setState({showModal : false})}}>X</button>
+          <div class="simple-modal-header">
+            <div class="simple-modal-header-infs">
+              <p>Fechando OS  {this.state.osBeingClosed.osNumber}</p>
+              <p>{this.state.osBeingClosed.description}</p>
+            </div>
+            <div class="btn-area-close-modal">
+              <button 
+                  class="close-simple-modal"
+                  onClick={() => {this.setState({showModal : false})}}>
+                  X
+              </button>
+            </div>
           </div>
-
           <div className="simple-modal-body">
             <div className="opening-user-container">
               <label>Usuário solicitante</label>
@@ -286,7 +302,7 @@ class SimpleModal extends React.Component{
           </div>
           
           <div className="simple-modal-footer">
-            <button className="btn" onClick={this.handleOnConfirmClick}>Confirmar Fechamento</button>
+            <button className={this.state.isCloseBtnActive ? "btn" : "btn btn-desativado"} onClick={this.handleOnConfirmClick}>Confirmar</button>
           </div>
         </div>
       </div>

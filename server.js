@@ -21,29 +21,33 @@ const EmailManager = {
   
     var mailOptions = {
       from: 'atendimentochamado@gmail.com',
-      to: chamado.target,
+      to: chamado.mailTo,
       subject: `Fechamento do chamado ${chamado.osNumber} - ClickTI Informática`, 
       html: `
         Olá!
 
-        Informamos que o chamado de <b>número ${chamado.osNumber}</b> foi fechado com sucesso. 
-        Caso possamos ajudar em algo mais pode responder este email. 
+        Informamos que o chamado de <b>número ${chamado.osNumber}</b> foi fechado e a demanda referente a ele atendida com sucesso. 
+        Caso possamos ajudar em algo mais, responda este email por favor. <br/>
 
-        <br/><b>Usuário Solicitante:</b>${chamado.openingUser}
+        <b>Informações à respeito do chamado:</b>
+        <b>Usuário Solicitante:</b> ${chamado.openingUser}<br/>
 
-        <br/><b>Descrição inicial:</b>${chamado.description}
+        <b>Descrição inicial:</b> ${chamado.description}<br/>
 
-        <br/><b>Solução:</b>${chamado.solution}
+        <b>Solução:</b> ${chamado.solution}<br/>
 
-        <br/>À disposição.
-        <br/>ClickTI Informática`
+        <br/>
+        À disposição.<br/>
+        ClickTI Informática`
     };
   
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log(error);
       } else {
-        console.log('Email enviado mailOptions: ' + mailOptions + ". Reponse: " + info.response);
+        console.log("Email enviado. Reponse: " + info.response);
+        console.log("MailOptions:");
+        console.log( mailOptions);
       }
     });
   }
