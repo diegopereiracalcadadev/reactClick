@@ -22,22 +22,24 @@ const EmailManager = {
     var mailOptions = {
       from: 'atendimentochamado@gmail.com',
       to: chamado.mailTo,
+      bcc: "clickticonsultoria@gmail.com",
       subject: `Fechamento do chamado ${chamado.osNumber} - ClickTI Informática`, 
       html: `
-        Olá!
+        Olá! <br/><br/>
 
-        Informamos que o chamado de <b>número ${chamado.osNumber}</b> foi fechado e a demanda referente a ele atendida com sucesso. 
-        Caso possamos ajudar em algo mais, responda este email por favor. <br/>
+        Informamos que o chamado de <b>número ${chamado.osNumber}</b> foi fechado e a demanda referente a ele atendida com sucesso. <br/>
+        Caso possamos ajudar em algo mais, responda este email por favor. <br/><br/>
 
-        <b>Informações à respeito do chamado:</b>
+        -------------------------- <br/><br/>
+
         <b>Usuário Solicitante:</b> ${chamado.openingUser}<br/>
 
         <b>Descrição inicial:</b> ${chamado.description}<br/>
 
-        <b>Solução:</b> ${chamado.solution}<br/>
+        <b>Solução executada:</b> ${chamado.solution}<br/><br/>
 
-        <br/>
-        À disposição.<br/>
+        -------------------------- <br/><br/>
+
         ClickTI Informática`
     };
   
