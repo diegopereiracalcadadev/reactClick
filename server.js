@@ -70,7 +70,8 @@ const ChamadosCrud = {
         var newvalues = { $set: {"status" : 1, 
                                 "openingUser" : chamado.openingUser,
                                 "mailTo" : chamado.mailTo,
-                                "solution" : chamado.solution} };
+                                "solution" : chamado.solution,
+                                "closingDate" : new Date() } };
         dbo.collection("chamados").updateOne(myquery, newvalues, function(err, res) {
           if (err) throw err;
           console.log("1 document updated");

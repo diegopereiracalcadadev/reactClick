@@ -8,7 +8,7 @@
     "openingDate" : "2018-06-10T05:14:17.179Z",
     "description" : "Computador  não está ligando.",
     "comments" : [],
-    "sendMailTo" : "tarapi007@gmail.com",
+    "mailTo" : "tarapi007@gmail.com",
     "closingDate" : ISODate("2018-06-30T22:42:18.768Z"),
     "solution" : ""
 }
